@@ -28,6 +28,9 @@ import {filterImageFromURL, deleteLocalFiles} from './util/util';
       res.status(200).sendFile(filteredImage, () =>{
         deleteLocalFiles([filteredImage])
       })
+    },
+    (error) => {
+      res.status(422).send(`Request failed due to image content "${error}"`)
     })
   });
   
