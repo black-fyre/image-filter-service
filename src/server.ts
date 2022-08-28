@@ -8,7 +8,7 @@ import {filterImageFromURL, deleteLocalFiles} from './util/util';
   const app = express();
 
   // Set the network port
-  const port = process.env.PORT || 8082;
+  const port: string | number = process.env.PORT || 8082;
   
   // Use the body parser middleware for post requests
   app.use(bodyParser.json());
@@ -16,20 +16,20 @@ import {filterImageFromURL, deleteLocalFiles} from './util/util';
   // @TODO1 IMPLEMENT A RESTFUL ENDPOINT
   // GET /filteredimage?image_url={{URL}}
   // endpoint to filter an image from a public url.
-  app.get( "/filteredimage", async ( req, res ) => {
-    let { image_url } = req.query;
+  app.get( "/filteredimage", async ( req , res ) => {
+    let  image_url:string = req.query.image_url;
 
     if ( !image_url ) {
       return res.status(400)
                 .send(`Image url is required`);
     }
 
-    filterImageFromURL(image_url).then((filteredImage) => {
+    filterImageFromURL(image_url).then((filteredImage: string) => {
       res.status(200).sendFile(filteredImage, () =>{
         deleteLocalFiles([filteredImage])
       })
     },
-    (error) => {
+    (error: any) => {
       res.status(422).send(`Request failed due to image content "${error}"`)
     })
   });
